@@ -8,15 +8,16 @@ MAX_BACKUPS_AGE=3
 DATE=$(date +\%Y\%m\%d)            
 ARCHIVE_NAME="log_$DATE.tar.gz"    
 
-FILE_PATH=/var/log/htpd/access_log
+mkdir -p "  $BACKUP_DIR"
+
 
 tar -czf "$BACKUP_DIR/$ARCHIVE_NAME" -C "$LOG_DIR" "$FILENAME"
 
 
 if [ $? -eq 0 ]; then
-    echo "Archivierung von $FILENAME erfolgreich: $BACKUP_DIR/$ARCHIVE_NAME"
+    echo "Archiving of $FILENAME successful: $BACKUP_DIR/$ARCHIVE_NAME"
 else
-    echo "Fehler bei der Archivierung von $FILENAME!"
+    echo "Error during archiving of $FILENAME!"
     exit 1
 fi
 
@@ -27,3 +28,5 @@ find "$BACKUP_DIR" -name "log_*.tar.gz" -type f -mtime +$MAX_BACKUPS_AGE -exec r
 > "$FILE_PATH"
 
 echo "old backups delete and file reset."
+
+chmod +x backup_files.sh
